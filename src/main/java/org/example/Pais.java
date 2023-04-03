@@ -1,6 +1,7 @@
 package org.example;
 
 
+import org.bson.Document;
 
 public class Pais {
 
@@ -81,5 +82,15 @@ public class Pais {
         this.longitud = longitud;
     }
 
-
+    public Document toDocument(){
+        Document document = new Document();
+        document.append("codigo", this.codigo);
+        document.append("nombre", this.nombre);
+        document.append("capital", this.capital);
+        document.append("region", this.region);
+        document.append("poblacion", this.poblacion);
+        document.append("latitud", this.latitud);
+        document.append("longitud", this.longitud);
+        return document;
+    }
 }

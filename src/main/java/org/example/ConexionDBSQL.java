@@ -2,7 +2,7 @@ package org.example;
 
 import java.sql.*;
 
-public class ConexionDB {
+public class ConexionDBSQL {
     private Connection conn;
     private Statement stmt;
     private ResultSet resultSet;
@@ -67,10 +67,10 @@ public class ConexionDB {
         this.password = password;
     }
 
-    public ConexionDB() {
+    public ConexionDBSQL() {
     }
 
-    public ConexionDB(String urlDB, String nombreDB, String user, String password) throws SQLException {
+    public ConexionDBSQL(String urlDB, String nombreDB, String user, String password) throws SQLException {
         this.urlDB = urlDB;
         this.nombreDB = nombreDB;
         this.user = user;
