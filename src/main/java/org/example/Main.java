@@ -1,6 +1,9 @@
 package org.example;
 
 import com.mongodb.client.*;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.json.JSONArray;
@@ -13,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Main {
@@ -89,7 +93,18 @@ public class Main {
         return paisArrayList;
     }
 
-    public static void buscarSQL(ConexionDBSQL db, Pais pais, int num) throws SQLException{
+    public static String reemplazar(String string){
+        string = string.replace("'", "");
+        if(string.length()>50){
+            string = string.substring(0, 50);
+        }
+        return string;
+    }
+
+    public static void buscarSQL(ConexionDBSQL db, Pais pais) throws SQLException{
+        pais.setNombre(reemplazar(pais.getNombre()));
+        pais.setCapital(reemplazar(pais.getCapital()));
+        pais.setRegion(reemplazar(pais.getRegion()));
         try{
             String queryBuscar = "SELECT codigoPais FROM pais WHERE codigoPais = ?";
             PreparedStatement preparedStatement = db.getConn().prepareStatement(queryBuscar);
@@ -119,7 +134,7 @@ public class Main {
 
     }
 
-    public static void buscarMongo(MongoCollection<Document> collection, Pais pais, int num){
+    public static void buscarMongo(MongoCollection<Document> collection, Pais pais){
         try{
 
             Document query = new Document("codigo", pais.getCodigo());
@@ -157,7 +172,7 @@ public class Main {
             System.out.println("Fallo en conexion con DB mongo\n"+e);
             e.printStackTrace();
         }
-        /*
+
         try{
             Document filter = new Document("region","Americas");
             MongoCursor<Document> cursor = dbMongo.getCollection().find(filter).iterator();
@@ -228,21 +243,73 @@ public class Main {
             System.out.println("Fallo en pregunta 5.5\n"+e);
             e.printStackTrace();
         }
-        */
-        try{
-            Document filter = new Document("codigo", 258);
-            dbMongo.getCollection().deleteOne(filter);
 
-            System.out.println("Pregunta 5.6: ");
-            MongoCursor<Document> cursor = dbMongo.getCollection().find(filter).iterator();
-            if (cursor.hasNext()){
-                System.out.println("Todavia existe el registro");
-            }else {
-                System.out.println("Borrado correctamente");
+        try{
+            List<Document> filters = new ArrayList<>();
+            filters.add(new Document("poblacion", new Document("$gt", 50000000)));
+            filters.add(new Document("poblacion", new Document("$lt", 150000000)));
+            Document filter = new Document("$and", filters);
+            MongoCursor<Document> results = dbMongo.getCollection().find(filter).iterator();
+            System.out.println("Pregunta 5.7: ");
+            while(results.hasNext()){
+                System.out.print(results.next().get("nombre") +", ");
             }
             System.out.println("\n--------------------------------------------------------------------------");
         }catch (Exception e){
-            System.out.println("Fallo en pregunta 5.6\n"+e);
+            System.out.println("Fallo en pregunta 5.7\n"+e);
+            e.printStackTrace();
+        }
+
+        try{
+            MongoCursor<Document> results = dbMongo.getCollection().find().sort(Sorts.ascending("nombre")).iterator();
+            System.out.println("Pregunta 5.8: ");
+            while(results.hasNext()){
+                System.out.print(results.next().get("nombre").toString()+", ");
+            }
+
+            System.out.println("\n--------------------------------------------------------------------------");
+        }catch (Exception e){
+            System.out.println("Fallo en pregunta 5.8\n"+e);
+            e.printStackTrace();
+        }
+
+        try{
+            MongoCursor<Document> results = dbMongo.getCollection().find().skip(10).iterator();
+            System.out.println("Pregunta 5.9: ");
+            while(results.hasNext()){
+                System.out.print(results.next().get("nombre").toString()+", ");
+            }
+
+            System.out.println("\n--------------------------------------------------------------------------");
+        }catch (Exception e){
+            System.out.println("Fallo en pregunta 5.9\n"+e);
+            e.printStackTrace();
+        }
+
+        try{
+            var regex = "mex";
+            var query = Filters.regex("nombre", regex, "i");
+            MongoCursor<Document> cursor = dbMongo.getCollection().find(query).iterator();
+            System.out.println("Pregunta 5.10: ");
+            while (cursor.hasNext()) {
+                System.out.print(cursor.next().get("nombre").toString()+", ");
+            }
+            System.out.println("\n--------------------------------------------------------------------------");
+        }catch (Exception e){
+            System.out.println("Fallo en pregunta 5.10\n"+e);
+            e.printStackTrace();
+        }
+
+        try{
+            IndexOptions options = new IndexOptions().unique(true);
+            dbMongo.getCollection().createIndex(new Document("codigo", 1), options);
+            System.out.println("Pregunta 5.11: ");
+            System.out.println("Indice creado");
+
+
+            System.out.println("\n--------------------------------------------------------------------------");
+        }catch (Exception e){
+            System.out.println("Fallo en pregunta 5.11\n"+e);
             e.printStackTrace();
         }
 
@@ -259,22 +326,22 @@ public class Main {
 
         try{
             if(seleccion==0){
-                db = new ConexionDBSQL("jdbc:mysql://localhost:3306/", "paises_tp2", "root", "");
+                db = new ConexionDBSQL("jdbc:mysql://localhost:3306/", "paises_db", "root", "");
                 System.out.println("Conexión exitosa a la base de datos SQL " + db.getNombreDB());
             } else {
                 dbMongo = new ConexionMongoDB("paises_db","paises");
                 System.out.println("Conexión exitosa a la base de datos MongoDB " + dbMongo.getDatabase().getName());
             }
-            while(num < 300){
+            while(num < 301){
                 JSONArray jsonArray = conexionHTTPURL(url+num);
                 if(!(jsonArray==null)){
                     System.out.println("Numero "+num+":");
                     ArrayList<Pais> paisArrayList = creacionPais(jsonArray);
                     for (Pais pais : paisArrayList) {
                         if(seleccion == 0){
-                            buscarSQL(db, pais, num);
+                            buscarSQL(db, pais);
                         } else {
-                            buscarMongo(dbMongo.getCollection(), pais, num);
+                            buscarMongo(dbMongo.getCollection(), pais);
                         }
                     }
                 }else{
@@ -296,16 +363,19 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        /*String[] options = {"SQL", "MongoDB", "Salir"};
+        String[] options = {"SQL", "MongoDB", "Salir"};
         int seleccion = JOptionPane.showOptionDialog(null, "¿Con qué base de datos quiere ejecutar?",
                 "Seleccionar base de datos", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
                 null, options, options[0]);
 
         if(seleccion == 0 || seleccion == 1){
             ejecutar(seleccion);
+            if(seleccion==1){
+                preguntasFinales();
+            }
         } else {
             System.exit(0);
-        }*/
-        preguntasFinales();
+        }
+
     }
 }

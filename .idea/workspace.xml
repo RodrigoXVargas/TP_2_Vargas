@@ -59,7 +59,7 @@
       <workItem from="1680236395030" duration="6161000" />
       <workItem from="1680285879646" duration="599000" />
       <workItem from="1680450452323" duration="12263000" />
-      <workItem from="1680798397559" duration="14103000" />
+      <workItem from="1680798397559" duration="24638000" />
     </task>
     <task id="LOCAL-00001" summary="TP completo">
       <created>1679869577685</created>
@@ -75,7 +75,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680483232438</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="preguntas del final">
+      <created>1680832027241</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1680832027241</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -95,6 +102,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="TP completo" />
     <MESSAGE value="Se completa parte de mongo, excepto preguntas del final" />
-    <option name="LAST_COMMIT_MESSAGE" value="Se completa parte de mongo, excepto preguntas del final" />
+    <MESSAGE value="preguntas del final" />
+    <option name="LAST_COMMIT_MESSAGE" value="preguntas del final" />
   </component>
 </project>
