@@ -82,6 +82,11 @@ public class Pais {
         this.longitud = longitud;
     }
 
+    /**
+     * Se crea un metodo para pasar el objeto pais a un objeto tipo Document para hacer luego la persistencia
+     * en Mongo
+     * @return
+     */
     public Document toDocument(){
         Document document = new Document();
         document.append("codigo", this.codigo);

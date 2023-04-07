@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="72df510b-2fbc-4174-97fd-e9b8e5d231ab" name="Changes" comment="">
+    <list default="true" id="72df510b-2fbc-4174-97fd-e9b8e5d231ab" name="Changes" comment="se agrega javadocs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ConexionDBSQL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ConexionDBSQL.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ConexionMongoDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ConexionMongoDB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Pais.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Pais.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +62,8 @@
       <workItem from="1680236395030" duration="6161000" />
       <workItem from="1680285879646" duration="599000" />
       <workItem from="1680450452323" duration="12263000" />
-      <workItem from="1680798397559" duration="24638000" />
+      <workItem from="1680798397559" duration="25283000" />
+      <workItem from="1680883301325" duration="2387000" />
     </task>
     <task id="LOCAL-00001" summary="TP completo">
       <created>1679869577685</created>
@@ -82,7 +86,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680832027241</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="TRABAJO TERMINADO">
+      <created>1680843702086</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1680843702086</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -103,6 +114,8 @@
     <MESSAGE value="TP completo" />
     <MESSAGE value="Se completa parte de mongo, excepto preguntas del final" />
     <MESSAGE value="preguntas del final" />
-    <option name="LAST_COMMIT_MESSAGE" value="preguntas del final" />
+    <MESSAGE value="TRABAJO TERMINADO" />
+    <MESSAGE value="se agrega javadocs" />
+    <option name="LAST_COMMIT_MESSAGE" value="se agrega javadocs" />
   </component>
 </project>

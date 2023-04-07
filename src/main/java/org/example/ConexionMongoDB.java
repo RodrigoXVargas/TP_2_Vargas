@@ -38,6 +38,13 @@ public class ConexionMongoDB {
     public ConexionMongoDB() {
     }
 
+    /**
+     * Se crea un contructor con logica para crear la conexion con la DB de mongo, recibiendo el nombre
+     * de la DB y el nombre de la coleccion.
+     * @param database
+     * @param collection
+     * @throws Exception
+     */
     public ConexionMongoDB(String database, String collection) throws Exception{
         try{
             this.mongoClient = MongoClients.create();

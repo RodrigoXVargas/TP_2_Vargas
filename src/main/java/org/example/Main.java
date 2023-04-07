@@ -20,6 +20,13 @@ import java.util.List;
 
 
 public class Main {
+    /**
+     * Funcion que recibe un String con la url a consultar, hace la conexion tipo GET y hace la conversion
+     * de la informacion retornada de la url a un JSONArray que se devolverá al final de la funcion
+     * @param urlString
+     * @return JSONArray
+     * @throws Exception
+     */
     public static JSONArray conexionHTTPURL(String urlString) throws Exception{
         URL url = new URL(urlString);
         JSONArray jsonArray = null;
@@ -48,6 +55,14 @@ public class Main {
         return jsonArray;
     }
 
+    /**
+     * Funcion que recibe un JSONArray con los datos a obtener para luego guardarlos en un Objeto Pais e
+     * insertarlo en un ArrayList de Paises y retornarlo en la funcion
+     * Se coloca un try catch para la obtencion de la capital, la latitud y longitud ya que se verifica
+     * que algunos paises tienen problemas en esos datos.
+     * @param jsonArray
+     * @return ArrayList<Pais>
+     */
     public static ArrayList<Pais> creacionPais(JSONArray jsonArray){
         ArrayList<Pais> paisArrayList = new ArrayList<>();
 
@@ -78,21 +93,15 @@ public class Main {
                 e.printStackTrace();
             }
         }
-        //verificacion
-                /*
-                System.out.println("---------------------------------");
-                System.out.println("nombre: "+pais.getNombre());
-                System.out.println(pais.getCapital());
-                System.out.println(pais.getRegion());
-                System.out.println(pais.getPoblacion());
-                System.out.println(pais.getCodigo());
-                System.out.println(pais.getLatitud());
-                System.out.println(pais.getLongitud());
-                System.out.println("---------------------------------");
-                */
         return paisArrayList;
     }
 
+    /**
+     * Funcion que recibe un String para borrarle las comillas simples y asegurarse que solo tengan 50
+     * caracteres, borrando los sobrantes.
+     * @param string
+     * @return String
+     */
     public static String reemplazar(String string){
         string = string.replace("'", "");
         if(string.length()>50){
@@ -101,6 +110,18 @@ public class Main {
         return string;
     }
 
+    /**
+     * Metodo para persistir un pais en la BD de SQL
+     * Recibe la conexion con la base de datos SQL y el pais a tratar
+     * En primera instancia se llama a la funcion "reemplazar(String string)" pasandole como parametro
+     * los atributos del pais que sean tipo string para modificarlos y que no interfieran con la llamada SQL
+     * Se busca el pais en la base de datos segun el codigo del pais, si no obtiene resultados lo
+     * guarda en la coleccion, por el contrario, si obtiene resultados, se actualiza el registro
+     * con los datos del pais pasado por parametro
+     * @param db
+     * @param pais
+     * @throws SQLException
+     */
     public static void buscarSQL(ConexionDBSQL db, Pais pais) throws SQLException{
         pais.setNombre(reemplazar(pais.getNombre()));
         pais.setCapital(reemplazar(pais.getCapital()));
@@ -131,9 +152,17 @@ public class Main {
             System.err.println("Error en metodo buscarSQL()\n"+e );
             e.printStackTrace();
         }
-
     }
 
+    /**
+     * Metodo para persistir un pais en la BD de MongoDB
+     * Recibe la coleccion de la base de datos y el pais a tratar
+     * Busca el pais en la base de datos segun el codigo del pais, si no obtiene resultados lo
+     * guarda en la coleccion, por el contrario, si obtiene resultados, se actualiza el registro
+     * con los datos del pais pasado por parametro
+     * @param collection
+     * @param pais
+     */
     public static void buscarMongo(MongoCollection<Document> collection, Pais pais){
         try{
 
@@ -163,6 +192,12 @@ public class Main {
         }
     }
 
+    /**
+     * Metodo que ejecuta todas las respuestas a las preguntas finales del TP sobre MongoDB
+     * Se conecta a la DB de MongoDB
+     * Cada respuesta tiene su propio Try-Catch porque se fue probando una por una
+     * y finalmente se cierra la conexion
+     */
     public static void preguntasFinales(){
         ConexionMongoDB dbMongo = null;
         try{
@@ -316,7 +351,16 @@ public class Main {
         dbMongo.getMongoClient().close();
     }
 
-
+    /**
+     * Este es el metodo principal del objetivo del programa, segun el parametro "seleccion" se procedera a
+     * conectar la base de datos correspondiente y luego a hacer la consulta a la url definida. Una vez se
+     * el json de la url, si no es nulo, se llama a la funcion "creacionPais(jsonArray)", obteniendo un Array
+     * de paises. Segun la seleccion, se pasa por parametro el Array al metodo correspondiente para guardarlos en
+     * persistencia elegida. Si el Json es nulo, se muestra por pantalla y finalmente se cierra la conexion
+     * con la base seleccionada
+     * @param seleccion
+     * @throws Exception
+     */
     public static void ejecutar(int seleccion) throws Exception {
         ConexionMongoDB dbMongo = null;
         ConexionDBSQL db = null;
@@ -362,6 +406,13 @@ public class Main {
 
     }
 
+    /**
+     * En el Main se ejecuta un JOptionPane para que el usuario elija el tipo de persistencia del programa,
+     * luego de la seleccion, se procede al metodo "ejecutar(seleccion)" pasandole el int de la variable
+     * seleccion. Al usuario tambien se le da la opcion de salir desde el mismo JOptionPane
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         String[] options = {"SQL", "MongoDB", "Salir"};
         int seleccion = JOptionPane.showOptionDialog(null, "¿Con qué base de datos quiere ejecutar?",

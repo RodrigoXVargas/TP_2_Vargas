@@ -70,6 +70,15 @@ public class ConexionDBSQL {
     public ConexionDBSQL() {
     }
 
+    /**
+     * Se crea un contructor con logica para crear la conexion con la DB de SQL, recibiendo la url de la
+     * la conexion, el nombre de la DB, el usuario y password.
+     * @param urlDB
+     * @param nombreDB
+     * @param user
+     * @param password
+     * @throws SQLException
+     */
     public ConexionDBSQL(String urlDB, String nombreDB, String user, String password) throws SQLException {
         this.urlDB = urlDB;
         this.nombreDB = nombreDB;
